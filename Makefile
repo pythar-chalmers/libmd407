@@ -1,7 +1,7 @@
 .PHONY: build clean
 
-C_SOURCES	= $(wildcard src/*.c)
-HEADERS		= $(wildcard src/*.h)
+C_SOURCES	= $(wildcard src/*.c std/*.c)
+HEADERS		= $(wildcard src/*.h std/*.h)
 OBJ 		= $(C_SOURCES:.c=.o)
 
 CC		= arm-none-eabi-gcc
@@ -18,7 +18,7 @@ BUILD_DIR	= build
 BUILD_BIN	= MOP
 
 %.o : %.c ${HEADERS}
-	mkdir -p ${BUILD_DIR} 
+	mkdir -p ${BUILD_DIR}
 	${CC} -c $< ${CC_FLAGS} -I. -I ${HEADERS}
 	arm-none-eabi-g++ -o ${BUILD_DIR}/${BUILD_BIN} -L. *.o -lgcc -lc_nano -Tmd407-ram.x -nostartfiles \
 		-L /usr/include/newlib/c++/9.2.1/arm-none-eabi/thumb/v6-m/nofp \
