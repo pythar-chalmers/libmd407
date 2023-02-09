@@ -30,8 +30,7 @@ void print_usart(char *s, unsigned char id) {
     while (*s)
         print_char(*s++, id);
 }
-
-void print_console(char *s) {
+void printc(char *s) {
 	print_usart(s, 0);
 }
 
