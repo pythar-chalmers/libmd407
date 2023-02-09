@@ -1,6 +1,6 @@
 #include "debug.h"
 
-typedef struct USART {
+typedef struct {
 	volatile unsigned short sr;
 	volatile unsigned short Unused0;
 	volatile unsigned short dr;
@@ -16,9 +16,6 @@ typedef struct USART {
 	volatile unsigned short gtpr;
 } USART, *PUSART;
 
-#define _USART_BASE 0x40011000
-#define USART(n)    ((PUSART) _USART_BASE + 0x1400 * n)
-
 static void print_char(char c, unsigned char id) {
 	while ((USART(id)->sr & 0x80) == 0)
 		;
@@ -27,10 +24,9 @@ static void print_char(char c, unsigned char id) {
 		print_char('\r', id);
 }
 void print_usart(char *s, unsigned char id) {
-    while (*s)
-        print_char(*s++, id);
+	while (*s)
+		print_char(*s++, id);
 }
 void printc(char *s) {
 	print_usart(s, 0);
 }
-
