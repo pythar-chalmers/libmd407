@@ -1,0 +1,24 @@
+﻿---
+BasedOnStyle: LLVM
+IndentWidth: 4
+AllowShortFunctionsOnASingleLine: 'None'
+AllowShortIfStatementsOnASingleLine: 'Never'
+AlignAfterOpenBracket: 'Align'
+AlignConsecutiveAssignments: 'Consecutive'
+AlignConsecutiveBitFields: 'Consecutive'
+AlignConsecutiveMacros: 'Consecutive'
+AlignOperands: 'AlignAfterOperator'
+AlignTrailingComments: true
+AllowAllArgumentsOnNextLine: false
+AllowShortBlocksOnASingleLine: 'Empty'
+AllowShortLoopsOnASingleLine: false
+BreakBeforeBraces: 'Attach'
+BreakBeforeBinaryOperators: 'NonAssignment'
+SpaceAfterCStyleCast: true
+SpaceAfterLogicalNot: false
+SpaceBeforeParens: 'ControlStatements'
+TabWidth: 4
+UseTab: 'ForIndentation'
+ColumnLimit: 78
+UseCRLF: false
+DeriveLineEnding: false
