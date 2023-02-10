@@ -10,16 +10,16 @@ Include the headers and link the *.c* files with your program.
 #include <md407/debug.h>
 
 void main() {
-	// Set pins 7-15 as outputs.
-	GPIO_E->moder_high = 0x5555;
+    // Set pins 7-15 as outputs.
+    GPIO_E->moder_high = 0x5555;
 
     //Delay for 1 second.
     delay_milli(1000);
 
-	// Write 'E' to the output.
-	GPIO_E->odr_high = 'E';
+    // Write 'E' to the output.
+    GPIO_E->odr_high = 'E';
 
-	// Print a text to USART1 for debug.
+    // Print a text to USART1 for debug.
     printc("Hello World!\n");
 }
 ```
