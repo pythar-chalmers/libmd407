@@ -1,7 +1,7 @@
 .PHONY: build clean
 
-C_SOURCES	= $(wildcard src/*.c std/*.c)
-HEADERS		= $(wildcard src/*.h std/*.h)
+C_SOURCES	= $(wildcard test/*.c md407/*.c)
+HEADERS		= $(wildcard test/*.h md407/*.h)
 OBJ 		= $(C_SOURCES:.c=.o)
 
 CC		= arm-none-eabi-gcc
@@ -20,16 +20,16 @@ BUILD_BIN	= MOP
 %.o : %.c ${HEADERS}
 	mkdir -p ${BUILD_DIR}
 	${CC} -c $< ${CC_FLAGS} -I. -I ${HEADERS}
-	arm-none-eabi-g++ -o ${BUILD_DIR}/${BUILD_BIN} -L. *.o -lgcc -lc_nano -Tmd407-ram.x -nostartfiles \
+	arm-none-eabi-g++ -o ${BUILD_DIR}/${BUILD_BIN} -L. ${OBJ} -lgcc -lc_nano -Tmd407-ram.x -nostartfiles \
 		-L /usr/include/newlib/c++/9.2.1/arm-none-eabi/thumb/v6-m/nofp \
 		-L /usr/lib/arm-none-eabi/newlib/thumb/v6-m/nofp \
 		-L /usr/lib/gcc/arm-none-eabi/9.2.1/thumb/v6-m/nofp \
 		-D ${CC_PREPROC}
 
 build : ${OBJ}
-	mv *.o ${BUILD_DIR}/
+	mv ${OBJ} ${BUILD_DIR}/
 	arm-none-eabi-objcopy -S -O srec ${BUILD_DIR}/${BUILD_BIN} ${BUILD_DIR}/${BUILD_BIN}.s19
 	arm-none-eabi-objdump -D -S ${BUILD_DIR}/${BUILD_BIN} > ${BUILD_DIR}/${BUILD_BIN}.dass
 
 clean:
-	rm -rf src/*.o src/*.gch build/ *.o
+	rm -rf md407/*.o md407/*.gch build/ *.o
