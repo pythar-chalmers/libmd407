@@ -1,14 +1,16 @@
-.PHONY: build clean
+.PHONY: build test clean
 
 C_SOURCES	= $(wildcard test/*.c md407/*.c)
 HEADERS		= $(wildcard test/*.h md407/*.h)
 OBJ 		= $(C_SOURCES:.c=.o)
 
-CC		= arm-none-eabi-gcc
+CC			= arm-none-eabi-gcc
 
 # Debug flags
-CC_FLAGS	= -g -O0 -Wall -Wextra -Wpedantic -mthumb -march=armv6-m -mno-unaligned-access -mfloat-abi=soft -std=gnu17
+CC_FLAGS	= -g -O0 -Wall -Wextra -Wpedantic -mthumb -march=armv6-m -mno-unaligned-access -mfloat-abi=soft -std=gnu17 -I./md407
 CC_PREPROC	= SIMULATOR # NOTE: remove when compiling for real hardware
+
+LD_FLAGS	= -L./md407
 
 # Release flags
 # Use these ↓ flags for when building for release.
@@ -20,7 +22,7 @@ BUILD_BIN	= MOP
 %.o : %.c ${HEADERS}
 	mkdir -p ${BUILD_DIR}
 	${CC} -c $< ${CC_FLAGS} -I. -I ${HEADERS}
-	arm-none-eabi-g++ -o ${BUILD_DIR}/${BUILD_BIN} -L. ${OBJ} -lgcc -lc_nano -Tmd407-ram.x -nostartfiles \
+	arm-none-eabi-g++ -o ${BUILD_DIR}/${BUILD_BIN} -L. *.o -lgcc -lc_nano -Tmd407-ram.x -nostartfiles \
 		-L /usr/include/newlib/c++/9.2.1/arm-none-eabi/thumb/v6-m/nofp \
 		-L /usr/lib/arm-none-eabi/newlib/thumb/v6-m/nofp \
 		-L /usr/lib/gcc/arm-none-eabi/9.2.1/thumb/v6-m/nofp \
@@ -33,3 +35,12 @@ build : ${OBJ}
 
 clean:
 	rm -rf md407/*.o md407/*.gch build/ *.o
+
+
+all: test
+
+md407.a:
+	$(MAKE) -C md407
+
+test: md407.a
+	$(CC) $(CC_FLAGS) $(LD_FLAGS) -o $@ test/*.c -lmd407
