@@ -59,8 +59,11 @@ $(TEST_BUILD_DIR)/%.o: $(TEST_SRCS) $(HEADERS)
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+# Rule to build all the files
+build: $(BUILT_LIBS)
+
 # Rule to install the header files and libraries
-install:
+install: build
 	mkdir -p $(DESTDIR)/include/md407
 	cp $(HEADERS) $(DESTDIR)/include/md407
 	mkdir -p $(DESTDIR)/lib/md407
@@ -79,4 +82,4 @@ clean:
 # Dependency to ensure the build directory is created
 $(BUILT_LIBS): $(addprefix $(BUILD_DIR)/, $(OBJS))
 
-.PHONY: all install uninstall test
+.PHONY: all build install uninstall test
