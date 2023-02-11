@@ -46,7 +46,7 @@ BUILT_LIBS = $(addprefix $(BUILD_DIR)/, $(TARGETS))
 BUILT_LIBS_OBJ = $(addprefix $(BUILD_DIR)/, $(OBJS))
 
 # Define the built tests
-BUILT_TESTS = $(TEST_OBJS:.o=)
+BUILT_TESTS = $(addprefix $(BUILD_DIR)/, $(TEST_OBJS:.o=))
 
 # Rule to build the target libraries
 $(BUILD_DIR)/$(LIB_SRC_DIR)/%.a: $(BUILD_DIR)/$(LIB_SRC_DIR)/%.o
@@ -58,12 +58,12 @@ $(BUILD_DIR)/$(LIB_SRC_DIR)/%.o: $(LIB_SRC_DIR)/%.c $(HEADERS)
 
 # Rule to build and test the sources inside the tests directory
 $(BUILD_DIR)/$(TEST_SRC_DIR)/%: $(BUILD_DIR)/$(TEST_SRC_DIR)/%.o $(BUILT_LIBS_OBJ)
-	@mkdir -p $(BUILD_DIR)
-	$(CC) $(CC_FLAGS) $< $(BUILT_LIBS_OBJ) -o $(BUILD_DIR)/$@
+	@mkdir -p $(@D)
+	$(CC) $(CC_FLAGS) $^ -o $@
 
 $(BUILD_DIR)/$(TEST_SRC_DIR)/%.o: $(TEST_SRC_DIR)/%.c $(HEADERS)
 	@mkdir -p $(@D)
-	$(CC) $(CC_FLAGS) -I$(HEADERS) -c $< -o $(BUILD_DIR)/$@
+	$(CC) $(CC_FLAGS) -I$(HEADERS) -c $< -o $@
 
 # Rule to build all the files
 build: $(BUILT_LIBS)
