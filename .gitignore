@@ -1,6 +1,7 @@
 *.o
 *.gch
 build/
+build-tests/
 # Prerequisites
 *.d
 
