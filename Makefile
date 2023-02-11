@@ -7,20 +7,23 @@ CC = arm-none-eabi-gcc
 AR = arm-none-eabi-ar
 
 # Define lib & test sources directory
-SRC_DIR			= md407
-TEST_SRC_DIR	= test
+LIB_SRC_DIR			= md407
+TEST_SRC_DIR		= test
 
 # Define the source files
-SRCS		= $(wildcard $(LIB_DIR)/*.c)
+SRCS		= $(wildcard $(LIB_SRC_DIR)/*.c)
 
 # Define the header files
-HEADERS		= $(wildcard $(LIB_DIR)/*.h)
+HEADERS		= $(wildcard $(LIB_SRC_DIR)/*.h)
 
 # Define the test files
 TEST_SRCS	= $(wildcard $(TEST_SRC_DIR)/*.c)
 
 # Define the target libraries
 TARGETS = $(SRCS:.c=.a)
+
+# Define the object files
+OBJS = $(SRCS:.c=.o)
 
 # Define the target tests
 TEST_OBJS = $(TEST_SRCS:.c=.o)
@@ -36,33 +39,31 @@ CC_FLAGS	=	-g -O0 -Wall -Wextra -Wpedantic -mthumb -march=armv6-m \
 
 # Define the build directory
 BUILD_DIR		= build
-TEST_BUILD_DIR	= build-tests
-
-# Define the object files
-OBJS = $(SRCS:.c=.o)
+# BUILD_DIR	= build-tests
 
 # Define the built libraries
 BUILT_LIBS = $(addprefix $(BUILD_DIR)/, $(TARGETS))
+BUILT_LIBS_OBJ = $(addprefix $(BUILD_DIR)/, $(OBJS))
 
 # Define the built tests
-BUILT_TESTS = $(addprefix $(TEST_BUILD_DIR)/, $(TEST_OBJS))
+BUILT_TESTS = $(TEST_OBJS:.o=)
 
 # Rule to build the target libraries
-$(BUILD_DIR)/%.a: $(BUILD_DIR)/%.o
+$(BUILD_DIR)/$(LIB_SRC_DIR)/%.a: $(BUILD_DIR)/$(LIB_SRC_DIR)/%.o
 	$(AR) rcs $@ $^
 
-$(BUILD_DIR)/%.o: %.c $(HEADERS)
+$(BUILD_DIR)/$(LIB_SRC_DIR)/%.o: $(LIB_SRC_DIR)/%.c $(HEADERS)
 	@mkdir -p $(@D)
 	$(CC) $(CC_FLAGS) -c $< -o $@
 
 # Rule to build and test the sources inside the tests directory
-$(TEST_BUILD_DIR)/%: $(TEST_BUILD_DIR)/%.o $(BUILT_LIBS)
-	@mkdir -p $(TEST_BUILD_DIR)
-	$(CC) $(CC_FLAGS) $< $(BUILT_LIBS) -o $(TEST_BUILD_DIR)/$@
+$(BUILD_DIR)/$(TEST_SRC_DIR)/%: $(BUILD_DIR)/$(TEST_SRC_DIR)/%.o $(BUILT_LIBS_OBJ)
+	@mkdir -p $(BUILD_DIR)
+	$(CC) $(CC_FLAGS) $< $(BUILT_LIBS_OBJ) -o $(BUILD_DIR)/$@
 
-$(TEST_BUILD_DIR)/%.o: $(TEST_SRC_DIR)/%.c $(HEADERS)
+$(BUILD_DIR)/$(TEST_SRC_DIR)/%.o: $(TEST_SRC_DIR)/%.c $(HEADERS)
 	@mkdir -p $(@D)
-	$(CC) $(CC_FLAGS) -I$(HEADERS) -c $< -o $(TEST_BUILD_DIR)/$@
+	$(CC) $(CC_FLAGS) -I$(HEADERS) -c $< -o $(BUILD_DIR)/$@
 
 # Rule to build all the files
 build: $(BUILT_LIBS)
@@ -83,7 +84,6 @@ uninstall:
 # Rule to clean up the object files and target libraries
 clean:
 	rm -rf $(BUILD_DIR)
-	rm -rf $(TEST_BUILD_DIR)
 
 # Dependency to ensure the build directory is created
 $(BUILT_LIBS): $(addprefix $(BUILD_DIR)/, $(OBJS))
