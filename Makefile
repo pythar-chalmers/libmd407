@@ -52,7 +52,7 @@ BUILT_TESTS = $(addprefix $(BUILD_DIR)/, $(TEST_OBJS:.o=))
 $(BUILD_DIR)/$(LIB_SRC_DIR)/%.a: $(BUILD_DIR)/$(LIB_SRC_DIR)/%.o
 	$(AR) rcs $@ $^
 
-$(BUILD_DIR)/$(LIB_SRC_DIR)/%.o: $(LIB_SRC_DIR)/%.c $(HEADERS)
+$(BUILD_DIR)/$(LIB_SRC_DIR)/%.o: $(LIB_SRC_DIR)/%.c
 	@mkdir -p $(@D)
 	$(CC) $(CC_FLAGS) -c $< -o $@
 
@@ -61,9 +61,9 @@ $(BUILD_DIR)/$(TEST_SRC_DIR)/%: $(BUILD_DIR)/$(TEST_SRC_DIR)/%.o $(BUILT_LIBS_OB
 	@mkdir -p $(@D)
 	$(CC) $(CC_FLAGS) $^ -o $@
 
-$(BUILD_DIR)/$(TEST_SRC_DIR)/%.o: $(TEST_SRC_DIR)/%.c $(HEADERS)
+$(BUILD_DIR)/$(TEST_SRC_DIR)/%.o: $(TEST_SRC_DIR)/%.c
 	@mkdir -p $(@D)
-	$(CC) $(CC_FLAGS) -I$(HEADERS) -c $< -o $@
+	$(CC) $(CC_FLAGS) -c $< -o $@
 
 # Rule to build all the files
 build: $(BUILT_LIBS)
