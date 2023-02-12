@@ -2,18 +2,19 @@
 This library contains a collection of utilities and helpful functions, data structures, macros, etc.
 
 ## Usage
-Include the headers and link the *.c* files with your program.
+Include the headers like: `#include <md407/debug.h`, and link the desired stuff.
 
 ### Example
 ```c
 #include <md407/gpio.h>
+#include <md407/time.h>
 #include <md407/debug.h>
 
-void main() {
+int main() {
     // Set pins 7-15 as outputs.
     GPIO_E->moder_high = 0x5555;
 
-    //Delay for 1 second.
+    // Delay for 1 second.
     delay_milli(1000);
 
     // Write 'E' to the output.
@@ -21,6 +22,8 @@ void main() {
 
     // Print a text to USART1 for debug.
     printc("Hello World!\n");
+
+	return 0;
 }
 ```
 
