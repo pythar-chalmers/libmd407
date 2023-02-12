@@ -23,7 +23,7 @@ int main() {
     // Print a text to USART1 for debug.
     printc("Hello World!\n");
 
-	return 0;
+    return 0;
 }
 ```
 
