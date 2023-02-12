@@ -1,5 +1,5 @@
-#include "../gpio.h"
-#include "../types.h"
+#include "gpio.h"
+#include "types.h"
 /*
     Keypad driver for the MD407
     Key mapping:
@@ -13,7 +13,7 @@
 
     The keypad is connected to GPIOE or GPIOD ( upper or lower )
 */
-typedef struct Keypad {
+typedef struct {
 	PGPIO port;
 	boolean upper;
 } Keypad;
