@@ -33,7 +33,7 @@ int main() {
 ## Installation
 Pick your system OS and follow the instructions:
 
-<details>
+<details open>
 <summary><h3>*NIX (Linux, MacOS, ...)</h3></summary>
 
 The destination directory (`DESTDIR`) should be `/usr/arm-none-eabi` on **Linux** *(maybe the same for other \*NIX... I haven't checked)*. If that does not work then do:
