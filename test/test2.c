@@ -1,5 +1,4 @@
 #include <md407/debug.h>
-#include <md407/gpio.h>
 #include <md407/math.h>
 #include <md407/time.h>
 #include <md407/types.h>
@@ -16,9 +15,13 @@ int main(void) {
 	uint32_t test = 123456;
 	test          = idiv(test, 100);
 
-	printc("Hello ");
+	printc("Hello");
+#ifndef SIMULATOR
 	delay_milli(1000);
-	printc("World!");
+#else
+	delay_milli(1); // because the sim is very slow
+#endif
+	printc(" World!");
 
 	return 0;
 }
