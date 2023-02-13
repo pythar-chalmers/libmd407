@@ -25,16 +25,6 @@ int main() {
     // Print a text to USART1 for debug.
     printc("Hello World!\n");
 
-	// Keypad example
-	Keypad keypad;
-	keypad_init(&keypad, GPIO_D, true);
-
-	while(true){
-		char key = keypad_read_char(&keypad);
-		print_one_char(key);
-		delay_milli(10);
-	}
-
     return 0;
 }
 
