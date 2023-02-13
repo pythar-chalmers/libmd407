@@ -11,7 +11,7 @@ Include the headers like: `#include <md407/debug.h`, and link the desired stuff.
 #include <md407/gpio.h>
 #include <md407/time.h>
 #include <md407/debug.h>
-#include <md407/driver/keypad.h>
+
 int main() {
     // Set pins 7-15 as outputs.
     GPIO_E->moder_high = 0x5555;
@@ -27,8 +27,6 @@ int main() {
 
     return 0;
 }
-
-
 ```
 
 
