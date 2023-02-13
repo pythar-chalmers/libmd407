@@ -36,7 +36,6 @@ typedef struct {
 
 } GPIO, *PGPIO;
 
-
 #define GPIO_A ((PGPIO) 0x40020000)
 #define GPIO_B ((PGPIO) 0x40020400)
 #define GPIO_C ((PGPIO) 0x40020800)

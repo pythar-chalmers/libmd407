@@ -3,62 +3,61 @@
 /**
  *  Initialize the keypad driver
  *
- * @param keypad The keypad struct to initialize
+ * @param self Pointer to the keypad (self)
  * @param port The GPIO port that the keypad is connected to.
- * @param isHigher If the keypad is connected to the higher 8 pins of the
+ * @param high_port If the keypad is connected to the higher 8 pins of the
  * port.
  */
-void keypad_init(Keypad *keypad, PGPIO port, boolean isHigher) {
-	keypad->port  = port;
-	keypad->upper = isHigher;
+void keypad_connect(Keypad *self, PGPIO port, boolean high_port) {
+	// Start the clock for the GPIO D & E ports
+	*((unsigned long *) 0x40023830) = 0x18;
 
-	uint8_t pin_start = isHigher ? 8 : 0;
+	self->_port = port;        // Assign the port base
+	self->map   = &KEYPAD_MAP; // Assign default keymap
 
+	/* Assign each register pins to the keypad */
+	_KEYPAD_ASSIGN_REGISTERS(moder, uint16_t, high_port);
+	_KEYPAD_ASSIGN_REGISTERS(otyper, uint8_t, high_port);
+	_KEYPAD_ASSIGN_REGISTERS(ospeedr, uint16_t, high_port);
+	_KEYPAD_ASSIGN_REGISTERS(pupdr, uint16_t, high_port);
+	_KEYPAD_ASSIGN_REGISTERS(idr, uint8_t, high_port);
+	_KEYPAD_ASSIGN_REGISTERS(odr, uint8_t, high_port);
+
+	/* Configure the pins */
 	// Set the output pins to high and the input pins to low
-	port->moder = 0x5500 << (pin_start * 2);
+	*self->_moder = 0x5500;
 
-	// Set the output type to push-pull
-	port->otyper = 0x0000 << pin_start;
+	/* // Set the output type to push-pull */
+	*self->_otyper = 0x0000;
 
-	// Set the speed to high
-	port->ospeedr = 0x5555 << (pin_start * 2);
+	/* // Set the speed to high */
+	*self->_ospeedr = 0x5555;
 
-	// Set the input type to pull-up
-	port->pupdr = 0x0066 << (pin_start * 2);
+	/* // Set the input type to pull-up */
+	*self->_pupdr = 0x0066;
 }
 
 /**
  *  Get the key that is currently pressed
  *
- * @param keypad The keypad struct to use
- * @return The key that is currently pressed. If no key is pressed, 0xFF is
- * returned.
+ * @param self Pointer to keypad (self)
+ * @return The first found key that is being pressed. If no key is found then
+ * KEYPAD_NULL_KEY is returned.
  */
-char keypad_read_char(Keypad *keypad) {
-
-	char keys[4][4] = {{'1', '2', '3', 'A'},
-	                   {'4', '5', '6', 'B'},
-	                   {'7', '8', '9', 'C'},
-	                   {'*', '0', '#', 'D'}};
-
-	uint8_t pin_start = keypad->upper ? 8 : 0;
+char keypad_read(Keypad *self) {
+	*self->_odr = 0;
 
 	for (uint8_t i = 0; i < 4; i++) {
-		keypad->port->odr = 0x0000 << pin_start;
-		keypad->port->odr = 0x10 << (i + pin_start);
+		*self->_odr = 0x10 << i;
 
 		for (uint8_t j = 0; j < 4; j++) {
-			if (keypad->upper) {
-				if (keypad->port->idr_high & 0x1 << j) {
-					return keys[i][j];
-				}
-			} else {
-				if (keypad->port->idr_low & 0x1 << j) {
-					return keys[i][j];
-				}
+			if (*self->_idr & (1 << j)) {
+				*self->_odr = 0;
+				return *self->map[i][j]; // TODO: fix j-offset
 			}
 		}
 	}
 
-	return 0xFF;
+	*self->_odr = 0;
+	return KEYPAD_NULL_KEY;
 }
