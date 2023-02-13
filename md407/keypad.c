@@ -54,10 +54,10 @@ char keypad_read(Keypad *self) {
 			if (*self->_idr & (1 << j)) {
 				*self->_odr = 0;
 				return *self->map[i][j]; // TODO: fix j-offset
+
 			}
 		}
 	}
-
 	*self->_odr = 0;
 	return KEYPAD_NULL_KEY;
 }
