@@ -6,27 +6,27 @@ startup(void) {
 	__asm__ volatile(".L1: B .L1\n"); /* never return */
 }
 
-#include <md407/debug.h>
-#include <md407/gpio.h>
-#include <md407/time.h>
+/* Keypad test */
+
+#include "../md407/keypad.h" // NOTE: Should be "#include <md407/keypad.h>" in actual source files
+#include "../md407/debug.h"
 
 int main() {
-	// Set pins 8-15 as outputs.
-	GPIO_D->moder_high = 0x5555; // 0101 0101 0101 0101
+	Keypad kp;
 
-	// Delay for 1 second.
+	// Connect the keypad to GPIO_D (HIGH)
+	keypad_connect(&kp, GPIO_D, true);
 
-#ifndef SIMULATOR
-	delay_milli(1000);
-#else
-	delay_milli(1); // because the sim is very slow
-#endif
+	char key;
+	char* str = " \n";
+	while(true) {
+		key = keypad_read(&kp);
 
-	// Write to the output.
-	GPIO_D->odr_high = 0xFF;
-
-	// Print a text to USART1 for debug.
-	printc("Hello World!\n");
+		if(key) {
+			str[0] = key;
+			printc(str);
+		}
+	}
 
 	return 0;
 }
