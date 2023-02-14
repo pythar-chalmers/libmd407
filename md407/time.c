@@ -4,7 +4,11 @@
 
 void delay_250ns(void) {
 	STK->control = 0;
-	STK->load    = (168 / 4) - 1;
+#ifndef SIMULATOR
+	STK->load = (168 / 4) - 1;
+#else
+	STK->load = 3;
+#endif
 	STK->value   = 0;
 	STK->control = 5;
 	while (BIT_CHECK(uint32_t, &STK->control, 16))

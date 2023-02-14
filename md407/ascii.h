@@ -25,11 +25,7 @@
 
 typedef struct {
 	PGPIO port;
-	char *text1;
-	char *text2;
 } ASCII;
-
-static char *_ASCII_EMPTY_TEXT = {0};
 
 // Constructor
 void ascii_connect(ASCII *self, PGPIO port);
@@ -38,10 +34,13 @@ void ascii_set_cursor(ASCII *self, uint8_t x, uint8_t y);
 // Write string to display
 void ascii_puts(ASCII *self, uint8_t x, uint8_t y, char *text);
 
+// Read from the display controller
+uint8_t _ascii_read_ctrl(ASCII *self);
+
 // Write to the display controller
 void _ascii_write_ctrl(ASCII *self, uint8_t cmd);
-// Read from the display controller
-uint8_t _ascii_read_controller(ASCII *self);
+// Write char to display
+void _ascii_write_char(ASCII *self, uint8_t c);
 
 // Write a command to the display
 void _ascii_write_cmd(ASCII *self, uint8_t cmd);
@@ -51,6 +50,3 @@ void _ascii_write_data(ASCII *self, uint8_t data);
 uint8_t _ascii_read_status(ASCII *self);
 // Read data from the display
 uint8_t _ascii_read_data(ASCII *self);
-
-// Write char to display
-void _ascii_write_char(ASCII *self, uint8_t c);

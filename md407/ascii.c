@@ -2,8 +2,6 @@
 
 void ascii_connect(ASCII *self, PGPIO port) {
 	self->port  = port;
-	self->text1 = _ASCII_EMPTY_TEXT;
-	self->text2 = _ASCII_EMPTY_TEXT;
 
 	// NOTE: &... may be broken
 	_ASCII_CTRL_BIT_CLEAR(self, _ASCII_CMD_RW | _ASCII_CMD_SELECT);
@@ -82,7 +80,7 @@ uint8_t _ascii_read_status(ASCII *self) {
 	_ASCII_CTRL_BIT_SET(self, _ASCII_CMD_RW);
 
 	uint8_t rv;
-	rv = _ascii_read_controller(self);
+	rv = _ascii_read_ctrl(self);
 
 	self->port->moder |= 0x55550000;
 
@@ -93,7 +91,7 @@ uint8_t _ascii_read_data(ASCII *self) {
 	_ASCII_CTRL_BIT_SET(self, _ASCII_CMD_RS);
 	_ASCII_CTRL_BIT_SET(self, _ASCII_CMD_RW);
 
-	return _ascii_read_controller(self);
+	return _ascii_read_ctrl(self);
 }
 
 void _ascii_write_char(ASCII *self, uint8_t c) {
@@ -112,10 +110,10 @@ void ascii_set_cursor(ASCII *self, uint8_t x, uint8_t y) {
 
 void ascii_puts(ASCII *self, uint8_t x, uint8_t y, char *text) {
 	ascii_set_cursor(self, x, y);
-	while(*text++) {
-		switch(*text) {
+	while (*text++) {
+		switch (*text) {
 		case _ASCII_NL:
-			ascii_set_cursor(self, x, y+1);
+			ascii_set_cursor(self, x, y + 1);
 			continue;
 		case _ASCII_CR:
 			ascii_set_cursor(self, 0, y);
