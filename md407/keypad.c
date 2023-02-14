@@ -15,7 +15,7 @@ void keypad_connect(Keypad *self, PGPIO port, boolean high_port) {
 	self->_port = port;        // Assign the port base
 	self->map   = &KEYPAD_MAP; // Assign default keymap
 
-	/* Assign each register pins to the keypad */
+	// Assign each register pins to the keypad
 	_KEYPAD_ASSIGN_REGISTERS(moder, uint16_t, high_port);
 	_KEYPAD_ASSIGN_REGISTERS(otyper, uint8_t, high_port);
 	_KEYPAD_ASSIGN_REGISTERS(ospeedr, uint16_t, high_port);
@@ -23,17 +23,17 @@ void keypad_connect(Keypad *self, PGPIO port, boolean high_port) {
 	_KEYPAD_ASSIGN_REGISTERS(idr, uint8_t, high_port);
 	_KEYPAD_ASSIGN_REGISTERS(odr, uint8_t, high_port);
 
-	/* Configure the pins */
+	// Configure the pins
 	// Set the output pins to high and the input pins to low
 	*self->_moder = 0x5500;
 
-	/* // Set the output type to push-pull */
+	// Set the output type to push-pull
 	*self->_otyper = 0x0000;
 
-	/* // Set the speed to high */
+	// Set the speed to high
 	*self->_ospeedr = 0x5555;
 
-	/* // Set the input type to pull-up */
+	// Set the input type to pull-up
 	*self->_pupdr = 0x0066;
 }
 
