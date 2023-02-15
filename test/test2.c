@@ -1,7 +1,5 @@
-#include <md407/debug.h>
-#include <md407/math.h>
-#include <md407/time.h>
-#include <md407/types.h>
+#include "../md407/lcd.h"
+#include "../md407/gpio.h"
 
 __attribute__((naked)) __attribute__((section(".start_section"))) void
 startup(void) {
@@ -12,16 +10,11 @@ startup(void) {
 }
 
 int main(void) {
-	uint32_t test = 123456;
-	test          = idiv(test, 100);
+	char* text = "hej lol\n\rkekw";
 
-	printc("Hello");
-#ifndef SIMULATOR
-	delay_milli(1000);
-#else
-	delay_milli(1); // because the sim is very slow
-#endif
-	printc(" World!");
+	LCD display;
+	lcd_connect(&display, GPIO_E);
+	lcd_puts(&display, 0, 0, text);
 
 	return 0;
 }

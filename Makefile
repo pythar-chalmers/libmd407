@@ -39,6 +39,7 @@ CC_FLAGS	=	-g -O0 -Wall -Wextra -Wpedantic -mthumb -march=armv6-m \
 				-L /usr/lib/arm-none-eabi/newlib/thumb/v6-m/nofp \
 				-L /usr/lib/gcc/arm-none-eabi/9.2.1/thumb/v6-m/nofp \
 				-mno-unaligned-access -mfloat-abi=soft -std=gnu17 -nostartfiles -I. \
+				-D SIMULATOR # NOTE: remove this if compiling for actual hardware
 # -D SIMULATOR
 
 OBJCOPY_FLAGS = -O srec

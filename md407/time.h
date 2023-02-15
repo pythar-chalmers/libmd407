@@ -41,5 +41,6 @@ typedef struct {
 #define STK ((PSYSTICK) 0xE000E010)
 
 void delay_250ns(void);
+void delay_nano(uint32_t ns);
 void delay_micro(uint32_t us);
 void delay_milli(uint32_t ms);
