@@ -1,0 +1,13 @@
+#include "gpio.h"
+
+
+static uint8_t seg_codes[] = { 0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07 ,0x7F, 0x67, 0x77, 0x7C, 0x39, 0x5E, 0x79, 0x71};
+
+typedef struct {
+	PGPIO gpio;
+} SEVENSEG, *PSEVENSEG;
+
+
+void seven_seg_init(PSEVENSEG pSeg, PGPIO port);
+int charToInt(uint8_t c);
+void out7seg(uint8_t c, PGPIO port);

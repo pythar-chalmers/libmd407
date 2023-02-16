@@ -1,22 +1,34 @@
+#include "sevenSeg.h"
 
-#include <gpio.h>
+void seven_seg_init(PSEVENSEG pSeg, PGPIO port) {
 
-typedef struct {
-	unsigned char SegCodes[] = { 0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07 ,0x7F, 0x67, 0x77, 0x7C, 0x39, 0x5E, 0x79, 0x71};
-	PGPIO gpio;
-} SEVENSEG, *PSEVENSEG;
+	pSeg->gpio = port;
 
-int charToInt(char c) {
+	// pin 7-0 outport
+	// pin 15-8 inport
+	port->moder = 0x55005555;
+
+	// GPIO OT
+	port->otyper = 0x00FF;
+
+	// GPIO PUPDR
+	port->pupdr_high = 0x00AA;
+}
+
+int charToInt(uint8_t c) 
+{
 	if (isalpha(c)) {
-		return c - 'a' + 10;
+		return c - 'A' + 10;
 	}
 	return (c - '0');
 }
-void out7seg(unsigned char c) {
-    if (c >= 16) {
-           *GPIO_D_LOW_ODR = 0x00;
+void out7seg(uint8_t c, PGPIO port) 
+{
+	int index = charToInt(c);
+    if (index >= 16) {
+    	port->odr_low = 0x0;
     } else {
-    	int index = charToInt(c);
-		*GPIO_D_LOW_ODR = SegCodes[index];
+    	port->odr_low = seg_codes[index];
 	}
 }
+
