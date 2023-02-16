@@ -49,10 +49,10 @@ float sqrt(float a) {
 	if (a < 0) // too complex for me
 		return NULL;
 
-	// this is dumb and O(n)
+	// this is dumb
 	float i = 0.0f;
 	while (i * i <= a) {
-		i += 0.1f;
+		i += 0.01f;
 	}
-	return i - 1.0f;
+	return i - 0.01f;
 }

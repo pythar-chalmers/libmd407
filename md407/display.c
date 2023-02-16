@@ -1,5 +1,6 @@
 #include "display.h"
 
+// Functions defined in debug
 __attribute__((naked))
 void _display_init() {
 	__asm__ volatile (".HWORD 0xDFF0\n");
@@ -7,7 +8,7 @@ void _display_init() {
 }
 
 __attribute__((naked))
-void _display_clear() {
+void display_clear() {
 	__asm__ volatile (".HWORD 0xDFF1\n");
 	__asm__ volatile ("BX LR\n");
 }
@@ -22,6 +23,12 @@ __attribute__((naked))
 void _display_px_clear(int x, int y) {
 	__asm__ volatile (".HWORD 0xDFF3\n");
 	__asm__ volatile ("BX LR\n");
+}
+
+// User functions
+void display_connect() {
+	_display_init();
+	display_clear();
 }
 
 void display_set_pixel(int x, int y, boolean on) {
