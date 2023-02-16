@@ -5,14 +5,22 @@
 // Struct for a vertex
 typedef struct {
 	char x, y;
-} Vertex, *PVertex;
+} Vertex;
 
-#define POINT(x, y) Vertex {x, y}
+#define POINT(x, y)                                                          \
+	Vertex { x, y }
 
 // Struct for a polygon
 typedef struct {
-	Vertex** verts;
+	Vertex **verts;
 	size_t count;
-} Polygon, *PPolygon;
+} Polygon;
 
-Polygon* polygon_new(Vertex** verts, size_t count);
+Polygon *polygon_new(Vertex **verts, size_t count);
+
+typedef struct {
+	Vertex *vert1;
+	Vertex *vert2;
+} Line;
+
+float gfx_line_length(Line *line);
