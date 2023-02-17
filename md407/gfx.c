@@ -84,3 +84,9 @@ void _gfx_rectangle_render(Rectangle *self) {
 }
 
 // Sprite functions
+void _gfx_sprite_render(Sprite *self) {
+	for (uint8_t w = 0; w < self->width; w++)
+		for (uint8_t h = 0; h < self->height; h++)
+			display_set_pixel(self->pos.x + w, self->pos.y + h,
+			                  self->pixelmap[h][w]);
+}

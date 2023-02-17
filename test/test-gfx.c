@@ -29,6 +29,17 @@ int main() {
 	// Create a rectangle
 	Rectangle rect = RECTANGLE(20, 10);
 
+	// Create a sprite
+	uint8_t **pixelmap = {
+		0, 1, 0, 1, 0,
+		0, 1, 0, 1, 0,
+		0, 0, 0, 0, 0,
+		1, 0, 0, 0, 1,
+		0, 1, 0, 1, 0,
+		0, 0, 1, 0, 0,
+	};
+	Sprite spr = SPRITE(5, 6, pixelmap);
+
 	while(true) {
 		// Render the line
 		display_clear();
@@ -48,6 +59,13 @@ int main() {
 		display_clear();
 		rect.pos = POINT(80, 40);
 		rect.render(&rect);
+
+		// Render the sprite
+		delay_milli(2000);
+
+		display_clear();
+		spr.pos = POINT(80, 40);
+		spr.render(&spr);
 
 		delay_milli(2000);
 	}

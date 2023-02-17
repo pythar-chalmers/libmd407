@@ -69,4 +69,23 @@ typedef struct Rectangle {
 
 #define SQUARE(w) RECTANGLE(w, w)
 
+// Function to render the rectangle
 void _gfx_rectangle_render(Rectangle *self);
+
+// Struct for a Sprite
+typedef struct Sprite {
+	uint8_t width, height;
+	uint8_t **pixelmap;
+	Point pos;
+
+	void (*render)(struct Sprite *self);
+} Sprite;
+
+#define SPRITE(w, h, pm)                                                     \
+	(Sprite) {                                                               \
+		.width = w, .height = h, .pos = POINT(0, 0),                         \
+		.render = &_gfx_sprite_render, .pixelmap = pm                        \
+	}
+
+// Function to render the sprite
+void _gfx_sprite_render(Sprite *self);
