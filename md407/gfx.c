@@ -57,15 +57,30 @@ void _gfx_polygon_render(Polygon *self) {
 
 	// Draw each line from i -> i+1
 	for (int i = 0; i < self->count - 1; i++) {
-		line_buf = LINE(self->verts[i], self->verts[i + 1]);
+		line_buf     = LINE(self->verts[i], self->verts[i + 1]);
 		line_buf.pos = self->pos;
 		_gfx_line_render(&line_buf);
 	}
 
 	// Draw the line from the last vertex to the first
-	line_buf = LINE(self->verts[self->count - 1], self->verts[0]);
+	line_buf     = LINE(self->verts[self->count - 1], self->verts[0]);
 	line_buf.pos = self->pos;
 	_gfx_line_render(&line_buf);
+}
+
+// Rectangle functions
+void _gfx_rectangle_render(Rectangle *self) {
+	// Render the sides
+	for (uint8_t dy = 0; dy <= self->height; dy++) {
+		display_set_pixel(self->pos.x, self->pos.y + dy, true);
+		display_set_pixel(self->pos.x + self->width, self->pos.y + dy, true);
+	}
+
+	// Render the bottom and top lines
+	for (uint8_t dx = 0; dx <= self->width; dx++) {
+		display_set_pixel(self->pos.x + dx, self->pos.y, true);
+		display_set_pixel(self->pos.x + dx, self->pos.y + self->height, true);
+	}
 }
 
 // Sprite functions

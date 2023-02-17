@@ -14,11 +14,7 @@ int main() {
 	display_connect();
 
 	// Create a line
-	Line line  = LINE(POINT(0, 0), POINT(40, 40));
-
-	// Render the line but with a offset
-	line.pos = POINT(20, 0);
-	line.render(&line);
+	Line line = LINE(POINT(0, 0), POINT(40, 40));
 
 	// Create a polygon
 	Vertex poly_verts[] = {
@@ -30,12 +26,31 @@ int main() {
 
 	Polygon poly = POLYGON(poly_verts, 4);
 
-	// Render the polygon
-	delay_milli(4000);
+	// Create a rectangle
+	Rectangle rect = RECTANGLE(20, 10);
 
-	display_clear();
-	poly.pos = POINT(20, 40);
-	poly.render(&poly);
+	while(true) {
+		// Render the line
+		display_clear();
+		line.pos = POINT(20, 0);
+		line.render(&line);
+
+		// Render the polygon
+		delay_milli(2000);
+
+		display_clear();
+		poly.pos = POINT(20, 40);
+		poly.render(&poly);
+
+		// Render the rectangle
+		delay_milli(2000);
+
+		display_clear();
+		rect.pos = POINT(80, 40);
+		rect.render(&rect);
+
+		delay_milli(2000);
+	}
 
 	return 0;
 }

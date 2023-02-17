@@ -53,6 +53,20 @@ typedef struct Polygon {
 // Function to render a polygon
 void _gfx_polygon_render(Polygon *self);
 
-// Function to create a polygon from an array of verts
-
 // Struct for a rectangle
+typedef struct Rectangle {
+	uint8_t width, height;
+	Point pos;
+
+	void (*render)(struct Rectangle *self);
+} Rectangle;
+
+#define RECTANGLE(w, h)                                                      \
+	(Rectangle) {                                                            \
+		.width = w, .height = h, .pos = POINT(0, 0),                         \
+		.render = &_gfx_rectangle_render                                     \
+	}
+
+#define SQUARE(w) RECTANGLE(w, w)
+
+void _gfx_rectangle_render(Rectangle *self);
