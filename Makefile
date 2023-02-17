@@ -31,7 +31,7 @@ CC_FLAGS	=	-O0 -Wall -Wextra -Wpedantic -mthumb -march=armv6-m \
 				-L /usr/lib/gcc/arm-none-eabi/9.2.1/thumb/v6-m/nofp \
 				-mno-unaligned-access -mfloat-abi=soft -std=gnu17 -nostartfiles -I. \
 				-g \
-				-D SIMULATOR 
+				-D SIMULATOR
 
 # NOTE: Remove "-D SIMULATOR" if compiling for actual hardware
 # IMPORTANT: Remove "-g" to remove debug crap and reduce size
@@ -61,7 +61,7 @@ test: $(BUILT_TESTS)
 # Rule to install the header files and libraries
 install: build
 	mkdir -p $(DESTDIR)/include/md407
-	cp $(HEADERS) $(DESTDIR)/include/md407
+	cp $(LIBRARY_SRCS) $(DESTDIR)/include/md407
 
 # Rule to uninstall the header files and libraries
 uninstall:
