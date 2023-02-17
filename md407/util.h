@@ -12,3 +12,10 @@
 */
 
 void test();
+
+/* IMPLEMENTATION */
+
+void test() {
+	char c = 'A';
+	c++;
+}
