@@ -30,8 +30,8 @@ CC_FLAGS	=	-O0 -Wall -Wextra -Wpedantic -mthumb -march=armv6-m \
 				-L /usr/lib/arm-none-eabi/newlib/thumb/v6-m/nofp \
 				-L /usr/lib/gcc/arm-none-eabi/9.2.1/thumb/v6-m/nofp \
 				-mno-unaligned-access -mfloat-abi=soft -std=gnu17 -nostartfiles -I. \
+				-g \
 				-D SIMULATOR 
-				# -g \
 
 # NOTE: Remove "-D SIMULATOR" if compiling for actual hardware
 # IMPORTANT: Remove "-g" to remove debug crap and reduce size
@@ -74,4 +74,4 @@ clean:
 # Define the default target for the Makefile
 all: test
 
-.PHONY: all install uninstall test
+.PHONY: test all install uninstall

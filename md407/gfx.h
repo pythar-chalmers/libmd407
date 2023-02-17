@@ -9,9 +9,6 @@ typedef struct {
 	char x, y;
 } Vertex, Point;
 
-// Function to render a point/vertex
-void _gfx_point_render(Vertex *self);
-
 #define POINT(xx, yy)                                                        \
 	(Point) { .x = xx, .y = yy }
 
@@ -30,8 +27,6 @@ typedef struct Line {
 		.render = &_gfx_line_render                                          \
 	}
 
-// Function to get a lines length
-float gfx_line_length(Line *self);
 // Function to render vertical line (helper function)
 void _gfx_line_vertical_render(Line *self, int16_t dy);
 // Function to render a line
@@ -94,24 +89,7 @@ void _gfx_sprite_render(Sprite *self);
 
 /* IMPLEMENTATION */
 
-// Vertex functions
-void _gfx_point_render(Vertex *self) {
-	display_set_pixel(self->x, self->y, true);
-}
-
 // Line functions
-float gfx_line_length(Line *self) {
-	float dx, dy;
-
-	dx = (float) (self->vert2.x - self->vert1.x);
-	dy = (float) (self->vert2.y - self->vert1.y);
-
-	// TOneverDO: replace this with a better sqrt alg
-	float invsqr = f_invsqrt(dx * dx + dy * dy);
-
-	return 1 / invsqr;
-}
-
 void _gfx_line_vertical_render(Line *self, int16_t dy) {
 	for (int16_t y = 0; y <= ABS(dy); y++)
 		display_set_pixel(self->vert1.x + self->pos.x,
@@ -180,5 +158,5 @@ void _gfx_sprite_render(Sprite *self) {
 	for (uint8_t w = 0; w < self->width; w++)
 		for (uint8_t h = 0; h < self->height; h++)
 			display_set_pixel(self->pos.x + w, self->pos.y + h,
-			                  self->pixelmap[h][w]);
+			                  self->pixelmap[h][w] > 0);
 }
