@@ -21,8 +21,9 @@ float gfx_line_length(Line *self) {
 }
 
 void _gfx_line_vertical_render(Line *self, Point position, int16_t dy) {
-	for(uint16_t y = 0; y <= dy; y++)
-		display_set_pixel(self->vert1.x + position.x, self->vert1.y + position.y + y, true);
+	for (int16_t y = 0; y <= ABS(dy); y++)
+		display_set_pixel(self->vert1.x + position.x,
+		                  self->vert1.y + position.y + SIGNEXT(y, dy), true);
 }
 
 void gfx_line_render(Line *self, Point position) {
@@ -30,19 +31,18 @@ void gfx_line_render(Line *self, Point position) {
 	dx = self->vert2.x - self->vert1.x;
 	dy = self->vert2.y - self->vert1.y;
 
-	if(dx <= 0)
+	if (dx == 0)
 		return _gfx_line_vertical_render(self, position, dy);
 
 	int16_t D = 2 * dy - dx;
 
-	uint16_t y = self->vert1.y + position.y;
-	for (uint16_t x = position.x; x <= self->vert2.x + position.x; x++) {
-
-		display_set_pixel(x, y, true);
+	int16_t y = self->vert1.y + position.y;
+	for (int16_t x = 0; x <= ABS(dx); x++) {
+		display_set_pixel(self->vert1.x + position.x + SIGNEXT(x, dx), y, true);
 
 		if (D > 0) {
-			y++;
-			D -= 2 * dx;
+			y += SIGNEXT(1, dy);
+			D -= SIGNEXT(2 * dx, dx);
 		}
 
 		D += 2 * dy;

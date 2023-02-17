@@ -1,4 +1,4 @@
-file build/test/gfx-test
+file build/test/test-gfx
 target extended-remote localhost:1234
 load
 monitor restart

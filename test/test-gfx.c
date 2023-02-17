@@ -14,7 +14,7 @@ int main() {
 	display_connect();
 
 	// Create a line
-	Line line = LINE(POINT(0, 0), POINT(40, 40));
+	Line line  = LINE(POINT(0, 0), POINT(40, 40));
 	Line line2 = LINE(POINT(0, 0), POINT(0, 40));
 
 	// sak
@@ -24,16 +24,19 @@ int main() {
 	display_set_pixel(20, 0, true);
 	display_set_pixel(60, 40, true);
 
-	delay_milli(1000);
-
 	// Render the lines
 	gfx_line_render(&line, POINT(0, 0));
 	gfx_line_render(&line2, POINT(50, 0));
 
-	delay_milli(1000);
-
 	// Render the line but with a offset
 	gfx_line_render(&line, POINT(20, 0));
+
+	// Line tests
+	/* display_set_pixel(100, 5, true); */
+	/* Line linex = LINE(POINT(50, 0), POINT(0, 0)); */
+	/* Line liney = LINE(POINT(0, 50), POINT(0, 0)); */
+	/* gfx_line_render(&linex, POINT(60, 5)); */
+	/* gfx_line_render(&liney, POINT(60, 5)); */
 
 	// Create a polygon
 	Vertex poly_verts[] = {
