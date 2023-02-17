@@ -20,5 +20,5 @@ jobs:
         sudo apt-get install -y binutils-arm-none-eabi
         sudo apt-get install -y libnewlib-arm-none-eabi
     - name: Build test
-      run: make build
+      run: make test
 
