@@ -14,30 +14,45 @@ void _gfx_point_render(Vertex *self);
 	(Point) { .x = xx, .y = yy }
 
 // Struct for a line
-typedef struct {
+typedef struct Line {
 	Vertex vert1;
 	Vertex vert2;
+	Point pos;
+
+	void (*render)(struct Line *self);
 } Line;
 
 #define LINE(v1, v2)                                                         \
-	(Line) { .vert1 = v1, .vert2 = v2 }
+	(Line) {                                                                 \
+		.vert1 = v1, .vert2 = v2, .pos = POINT(0, 0),                        \
+		.render = &_gfx_line_render                                          \
+	}
 
 // Function to get a lines length
 float gfx_line_length(Line *self);
 // Function to render vertical line (helper function)
-void _gfx_line_vertical_render(Line *self, Point position, int16_t dy);
+void _gfx_line_vertical_render(Line *self, int16_t dy);
 // Function to render a line
-void gfx_line_render(Line *self, Point position);
+void _gfx_line_render(Line *self);
 
 // Struct for a polygon
-typedef struct {
+typedef struct Polygon {
 	Vertex *verts;
 	size_t count;
+	Point pos;
+
+	void (*render)(struct Polygon *self);
 } Polygon;
 
-// Function to create a polygon from an array of verts
 #define POLYGON(vs, cc)                                                      \
-	(Polygon) { .verts = vs, .count = cc }
+	(Polygon) {                                                              \
+		.verts = vs, .count = cc, .pos = POINT(0, 0),                        \
+		.render = &_gfx_polygon_render                                       \
+	}
 
 // Function to render a polygon
-void gfx_polygon_render(Polygon *self, Point position);
+void _gfx_polygon_render(Polygon *self);
+
+// Function to create a polygon from an array of verts
+
+// Struct for a rectangle
