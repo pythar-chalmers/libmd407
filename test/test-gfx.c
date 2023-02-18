@@ -71,7 +71,7 @@ int main() {
 
 		display_clear();
 		spr.pos = POINT(80, 40);
-		spr.render(&spr);
+		spr.render(&spr, true);
 
 		delay_milli(2000);
 	}

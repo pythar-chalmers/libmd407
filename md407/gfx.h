@@ -76,7 +76,7 @@ typedef struct Sprite {
 	uint8_t height;
 	Point pos;
 
-	void (*render)(struct Sprite *self);
+	void (*render)(struct Sprite *self, boolean on);
 
 	uint8_t count;
 	Point pixels[_GFX_SPRITE_MAX_PIXELS];
@@ -89,7 +89,7 @@ typedef struct Sprite {
 	}
 
 // Function to render the sprite
-void _gfx_sprite_render(Sprite *self);
+void _gfx_sprite_render(Sprite *self, boolean on);
 
 /* IMPLEMENTATION */
 
@@ -169,10 +169,10 @@ void _gfx_rectangle_render(Rectangle *self) {
 }
 
 // Sprite functions
-void _gfx_sprite_render(Sprite *self) {
+void _gfx_sprite_render(Sprite *self, boolean on) {
 	Point pxBuf;
 	for (int i = 0; i < self->count; i++) {
 		pxBuf = self->pixels[i];
-		display_set_pixel(pxBuf.x + self->pos.x, pxBuf.y + self->pos.y, true);
+		display_set_pixel(pxBuf.x + self->pos.x, pxBuf.y + self->pos.y, on);
 	}
 }
