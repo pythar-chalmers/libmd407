@@ -28,7 +28,7 @@ typedef struct Line {
 	}
 
 // Function to render vertical line (helper function)
-void _gfx_line_vertical_render(Line *self, int16_t dy);
+/* void _gfx_line_vertical_render(Line *self, int16_t dy); */
 // Function to render a line
 void _gfx_line_render(Line *self);
 
@@ -90,33 +90,56 @@ void _gfx_sprite_render(Sprite *self);
 /* IMPLEMENTATION */
 
 // Line functions
-void _gfx_line_vertical_render(Line *self, int16_t dy) {
-	for (int16_t y = 0; y <= ABS(dy); y++)
-		display_set_pixel(self->vert1.x + self->pos.x,
-		                  self->vert1.y + self->pos.y + SIGNEXT(y, dy), true);
+/* void _gfx_line_vertical_render(Line *self, int16_t dy) { */
+/* 	for (int16_t y = 0; y <= ABS(dy); y++) */
+/* 		display_set_pixel(self->vert1.x + self->pos.x, */
+/* 		                  self->vert1.y + self->pos.y + SIGNEXT(y, dy), true);
+ */
+/* } */
+
+void _gfx_varswap(char *a, char *b) {
+	char tmp = *a;
+	*a       = *b;
+	*b       = tmp;
 }
 
 void _gfx_line_render(Line *self) {
-	int16_t dx, dy;
-	dx = self->vert2.x - self->vert1.x;
-	dy = self->vert2.y - self->vert1.y;
+	// Lazy
+	char x0 = self->vert1.x + self->pos.x;
+	char y0 = self->vert1.y + self->pos.y;
 
-	if (dx == 0) {
-		_gfx_line_vertical_render(self, dy);
-	} else {
-		int16_t D = 2 * dy - dx;
+	char x1 = self->vert2.x + self->pos.x;
+	char y1 = self->vert2.y + self->pos.y;
 
-		int16_t y = self->vert1.y + self->pos.y;
-		for (int16_t x = 0; x <= ABS(dx); x++) {
-			display_set_pixel(self->vert1.x + self->pos.x + SIGNEXT(x, dx), y,
-			                  true);
+	boolean steep = abs(y1 - y0) > abs(x1 - x0);
 
-			if (D > 0) {
-				y += SIGNEXT(1, dy);
-				D -= SIGNEXT(2 * dx, dx);
-			}
+	if (steep) {
+		_gfx_varswap(&x0, &y0);
+		_gfx_varswap(&x1, &y1);
+	}
 
-			D += 2 * dy;
+	if (x0 > x1) {
+		_gfx_varswap(&x0, &x1);
+		_gfx_varswap(&y0, &y1);
+	}
+
+	int delta_x = x1 - x0;
+	int delta_y = abs(y1 - y0);
+
+	int error = 0;
+	int y     = y0;
+	int ystep = y0 < y1 ? 1 : -1;
+
+	for (int x = x0; x <= x1; x++) {
+		if (steep)
+			display_set_pixel(y, x, true);
+		else
+			display_set_pixel(x, y, true);
+
+		error += delta_y;
+		if ((error << 1) >= delta_x) {
+			y += ystep;
+			error -= delta_x;
 		}
 	}
 }

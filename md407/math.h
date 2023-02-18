@@ -10,5 +10,10 @@
 #define RAD_TO_DEG(rad) (rad * 57.295779)
 
 // Generic artihmetic functions
-#define SIGNEXT(n, dn) (dn < 0 ? -n : n)
-#define ABS(n)         SIGNEXT(n, n)
+
+int abs(int n) {
+	if (n < 0)
+		return -n;
+	else
+		return n;
+}
