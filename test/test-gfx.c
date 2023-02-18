@@ -30,17 +30,23 @@ int main() {
 	Rectangle rect = RECTANGLE(20, 10);
 
 	// Create a sprite
-	uint8_t **pixelmap = {
-		0, 1, 0, 1, 0,
-		0, 1, 0, 1, 0,
-		0, 0, 0, 0, 0,
-		1, 0, 0, 0, 1,
-		0, 1, 0, 1, 0,
-		0, 0, 1, 0, 0,
-	};
-	Sprite spr = SPRITE(5, 6, pixelmap);
+	Sprite spr = SPRITE(12, 4, 4,
+	                    PIXEL_ARRAY({
+	                        {0, 1},
+	                        {0, 2},
+	                        {1, 0},
+	                        {1, 1},
+	                        {1, 2},
+	                        {1, 3},
+	                        {2, 0},
+	                        {2, 1},
+	                        {2, 2},
+	                        {2, 3},
+	                        {3, 1},
+	                        {3, 2},
+	                    }));
 
-	while(true) {
+	while (true) {
 		// Render the line
 		display_clear();
 		line.pos = POINT(20, 0);

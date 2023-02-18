@@ -3,6 +3,7 @@
 #include "display.h"
 #include "math.h"
 #include "types.h"
+#include "util.h"
 
 // Struct for a vertex
 typedef struct {
@@ -27,8 +28,6 @@ typedef struct Line {
 		.render = &_gfx_line_render                                          \
 	}
 
-// Function to render vertical line (helper function)
-void _gfx_line_vertical_render(Line *self, int16_t dy);
 // Function to render a line
 void _gfx_line_render(Line *self);
 
@@ -70,18 +69,23 @@ typedef struct Rectangle {
 void _gfx_rectangle_render(Rectangle *self);
 
 // Struct for a Sprite
+#define _GFX_SPRITE_MAX_PIXELS 30
+#define PIXEL_ARRAY(...)       __VA_ARGS__
 typedef struct Sprite {
-	uint8_t width, height;
-	uint8_t **pixelmap;
+	uint8_t width;
+	uint8_t height;
 	Point pos;
 
 	void (*render)(struct Sprite *self);
+
+	uint8_t count;
+	Point pixels[_GFX_SPRITE_MAX_PIXELS];
 } Sprite;
 
-#define SPRITE(w, h, pm)                                                     \
+#define SPRITE(nm, w, h, pxs)                                                \
 	(Sprite) {                                                               \
-		.width = w, .height = h, .pos = POINT(0, 0),                         \
-		.render = &_gfx_sprite_render, .pixelmap = pm                        \
+		.width = w, .height = h, .pos = POINT(0, 0), .count = nm,            \
+		.render = &_gfx_sprite_render, .pixels = pxs                         \
 	}
 
 // Function to render the sprite
@@ -90,33 +94,44 @@ void _gfx_sprite_render(Sprite *self);
 /* IMPLEMENTATION */
 
 // Line functions
-void _gfx_line_vertical_render(Line *self, int16_t dy) {
-	for (int16_t y = 0; y <= ABS(dy); y++)
-		display_set_pixel(self->vert1.x + self->pos.x,
-		                  self->vert1.y + self->pos.y + SIGNEXT(y, dy), true);
-}
 
 void _gfx_line_render(Line *self) {
-	int16_t dx, dy;
-	dx = self->vert2.x - self->vert1.x;
-	dy = self->vert2.y - self->vert1.y;
+	// Lazy
+	char x0 = self->vert1.x + self->pos.x;
+	char y0 = self->vert1.y + self->pos.y;
 
-	if (dx == 0) {
-		_gfx_line_vertical_render(self, dy);
-	} else {
-		int16_t D = 2 * dy - dx;
+	char x1 = self->vert2.x + self->pos.x;
+	char y1 = self->vert2.y + self->pos.y;
 
-		int16_t y = self->vert1.y + self->pos.y;
-		for (int16_t x = 0; x <= ABS(dx); x++) {
-			display_set_pixel(self->vert1.x + self->pos.x + SIGNEXT(x, dx), y,
-			                  true);
+	boolean steep = abs(y1 - y0) > abs(x1 - x0);
 
-			if (D > 0) {
-				y += SIGNEXT(1, dy);
-				D -= SIGNEXT(2 * dx, dx);
-			}
+	if (steep) {
+		c_swap(&x0, &y0);
+		c_swap(&x1, &y1);
+	}
 
-			D += 2 * dy;
+	if (x0 > x1) {
+		c_swap(&x0, &x1);
+		c_swap(&y0, &y1);
+	}
+
+	int delta_x = x1 - x0;
+	int delta_y = abs(y1 - y0);
+
+	int error = 0;
+	int y     = y0;
+	int ystep = y0 < y1 ? 1 : -1;
+
+	for (int x = x0; x <= x1; x++) {
+		if (steep)
+			display_set_pixel(y, x, true);
+		else
+			display_set_pixel(x, y, true);
+
+		error += delta_y;
+		if ((error << 1) >= delta_x) {
+			y += ystep;
+			error -= delta_x;
 		}
 	}
 }
@@ -155,8 +170,9 @@ void _gfx_rectangle_render(Rectangle *self) {
 
 // Sprite functions
 void _gfx_sprite_render(Sprite *self) {
-	for (uint8_t w = 0; w < self->width; w++)
-		for (uint8_t h = 0; h < self->height; h++)
-			display_set_pixel(self->pos.x + w, self->pos.y + h,
-			                  self->pixelmap[h][w] > 0);
+	Point pxBuf;
+	for (int i = 0; i < self->count; i++) {
+		pxBuf = self->pixels[i];
+		display_set_pixel(pxBuf.x + self->pos.x, pxBuf.y + self->pos.y, true);
+	}
 }
