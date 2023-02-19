@@ -2,7 +2,7 @@
 #include "mem.h"
 #include "types.h"
 
-typedef struct {
+typedef volatile struct {
 	union {
 		uint32_t control;
 		struct {
@@ -53,7 +53,7 @@ void delay_250ns(void) {
 	STK->load    = (168 / 4) - 1;
 	STK->value   = 0;
 	STK->control = 5;
-	while (BIT_CHECK(uint32_t, &STK->control, 16))
+	while (STK->count == 0)
 		;
 	STK->control = 0;
 }
@@ -63,7 +63,7 @@ void delay_nano(uint32_t ns) {
 	STK->load    = 6 * ns; // 5.9 ~ 6
 	STK->value   = 0;
 	STK->control = 5;
-	while (BIT_CHECK(uint32_t, &STK->control, 16))
+	while (STK->count == 0)
 		;
 	STK->control = 0;
 }

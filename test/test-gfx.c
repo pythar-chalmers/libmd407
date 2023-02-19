@@ -12,6 +12,7 @@ startup(void) {
 
 int main() {
 	display_connect();
+	// delay_nano(1000000000);
 
 	// Create a line
 	Line line = LINE(POINT(0, 0), POINT(40, 40));
