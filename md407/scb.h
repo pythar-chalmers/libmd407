@@ -8,12 +8,12 @@ typedef struct cpuid {
 	unsigned partno   : 12;
 	unsigned constant : 4;
 	unsigned variant  : 4;
-	unsigned char implementer;
+	uint8_t implementer;
 } CPUID;
 
 // Interrupt control and state register (ICSR)
 typedef struct icsr {
-	uint8_t vectactive;
+	unsigned vectactive   : 9;
 	unsigned              : 2;
 	unsigned ret_to_base  : 1;
 	unsigned vectpending  : 7;
@@ -36,7 +36,7 @@ typedef struct vtor {
 // Application interrupt and reset control register (AIRCR)
 typedef struct aircr {
 	unsigned vect_reset    : 1;
-	unsigned vect_cur_act  : 1;
+	unsigned vect_clr_act  : 1;
 	unsigned sys_reset_req : 1;
 	unsigned               : 5;
 	unsigned prigroup      : 3;
@@ -62,7 +62,7 @@ typedef struct ccr {
 	unsigned unalign_trp       : 1;
 	unsigned div_0_trp         : 1;
 	unsigned                   : 3;
-	unsigned sfhf_nmign        : 1;
+	unsigned bfhf_nmign        : 1;
 	unsigned stk_align         : 1;
 } CCR;
 
@@ -142,6 +142,7 @@ typedef volatile struct {
 	_EXC_REG_UNI(shpr1);
 	_EXC_REG_UNI(shpr2);
 	_EXC_REG_UNI(shpr3);
+	// TODO: make structs for the below params
 	uint32_t shprsr;
 	uint32_t cfsr;
 	uint32_t hfsr;
