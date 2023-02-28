@@ -10,7 +10,7 @@
 		unsigned name##_reserved : 14;                                       \
 	}
 
-typedef struct {
+typedef volatile struct {
 	_NVIC_RNG_THING(iser);
 	_NVIC_RNG_THING(cer);
 	_NVIC_RNG_THING(ispr);
