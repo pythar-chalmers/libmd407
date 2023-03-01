@@ -19,10 +19,3 @@ typedef struct {
 } *PEXTI;
 
 #define EXTI ((PEXTI) 0x40013C00)
-
-#define EXTI_BIT_SET(r, n)   BIT_SET(unsigned : 23, &EXTI->r, (1 << n))
-#define EXTI_BIT_CLEAR(r, n) BIT_CLEAR(unsigned : 23, &EXTI->r, (1 << n))
-
-void _test() {
-	EXTI_BIT_SET(imr, 2);
-}
