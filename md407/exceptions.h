@@ -2,6 +2,7 @@
 
 #include "types.h"
 
+/*
 // PS register control
 __attribute__((naked)) uint32_t _get_psr_reg() {
 	__asm__ volatile("MRS R0, PSR\n");
@@ -33,3 +34,7 @@ __attribute__((naked)) void _int_disable() {
 	__asm__ volatile("CPSID I\n");
 	__asm__ volatile("BX LR\n");
 }
+*/
+
+#define EXCEPTION_ASSIGN(offset, func)                                       \
+	*((void (**)(void))(0x2001C000 + offset)) = &func

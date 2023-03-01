@@ -5,6 +5,7 @@
 
 #define _SYSCFG_EXTI_DT_16_R(name)                                           \
 	union {                                                                  \
+		uint32_t _##name;                                                    \
 		struct {                                                             \
 			uint16_t name;                                                   \
 			unsigned : 16;                                                   \
@@ -18,7 +19,7 @@
 		};                                                                   \
 	}
 
-typedef struct {
+typedef volatile struct {
 	// MEMRMP
 	union {
 		uint32_t memrmp;

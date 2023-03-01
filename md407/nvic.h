@@ -1,18 +1,19 @@
 #pragma once
 
+#include "mem.h"
 #include "types.h"
 
 #define _NVIC_RNG_THING(name)                                                \
-	struct name {                                                            \
-		uint32_t name##_0;                                                   \
-		uint32_t name##_1;                                                   \
-		unsigned name##_2        : 18;                                       \
-		unsigned name##_reserved : 14;                                       \
+	DT_32(name##_0);                                                         \
+	DT_32(name##_1);                                                         \
+	union {                                                                  \
+		uint32_t _##name##_reserved;                                         \
+		unsigned name##_2 : 18;                                              \
 	}
 
 typedef volatile struct {
 	_NVIC_RNG_THING(iser);
-	_NVIC_RNG_THING(cer);
+	_NVIC_RNG_THING(icer);
 	_NVIC_RNG_THING(ispr);
 	_NVIC_RNG_THING(icpr);
 	_NVIC_RNG_THING(iabr);

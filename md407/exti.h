@@ -9,7 +9,7 @@
 		unsigned r : 23;                                                     \
 	}
 
-typedef struct {
+typedef volatile struct {
 	_EXTI_REG(imr);
 	_EXTI_REG(emr);
 	_EXTI_REG(rtsr);
